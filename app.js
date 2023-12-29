@@ -7,12 +7,36 @@ let circle_y = 60;
 let radius = 20;
 let xSpeed = 20;
 let ySpeed = 20;
+let ground_x = 150;
+let ground_y = 700;
+let ground_heught = 5;
+
+c.addEventListener("mousemove", (e) => {
+  ground_x = e.clientX;
+});
 
 function drawCircle() {
+  //確認球是否打到黃色地板
+  if (
+    circle_x >= ground_x - radius &&
+    circle_x <= ground_x + 200 + radius &&
+    circle_y >= ground_y - radius &&
+    circle_y <= ground_y + radius
+  ) {
+    if (ySpeed > 0) {
+      circle_y -= 40;
+    } else {
+      circle_y += 40;
+    }
+    ySpeed *= -1;
+  }
+
   //確認球是否打到邊界
+  //確認左右邊界
   if (circle_x >= canvasWidth - radius || circle_x <= radius) {
     xSpeed *= -1;
   }
+  //確認上下邊界
   if (circle_y >= canvasHeight - radius || circle_y <= radius) {
     ySpeed *= -1;
   }
@@ -24,6 +48,10 @@ function drawCircle() {
   //畫出黑色背景
   ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+  //劃出控制的地板
+  ctx.fillStyle = "yellow";
+  ctx.fillRect(ground_x, ground_y, 200, ground_heught);
 
   //劃出圓球
   ctx.beginPath();
